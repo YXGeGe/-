@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.PlayerDao">
+
+    <insert id="insertOnePlayer" parameterType="String">
+        insert into player(playername) values (#{playerName})
+    </insert>
+
+    <select id="findAllPage" resultType="entity.player">
+         select * from player LIMIT #{before},#{after} ;
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from player
+    </select>
+
+
+
+    <insert id="insertOnePM" >
+        insert into player_match(playerid, matchid) values (#{playerId},#{matchId});
+    </insert>
+
+    <select id="selectAllPlayer" resultType="int">
+        select playerid from player_match where matchid = #{matchId}
+    </select>
+    <!--<select id="selectOnePM" resultType="int">-->
+        <!--select playerid from player_match where matchid=#{matchId};-->
+    <!--</select>-->
+</mapper>

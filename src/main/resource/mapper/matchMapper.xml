@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.MatchDao">
+
+    <select id="findAllPage"  resultType="entity.Match">
+         select * from matchs LIMIT #{before},#{after} ;
+    </select>
+
+
+    <select id="count" resultType="int">
+        select count(*) from matchs
+    </select>
+
+
+    <!--更改一个用户-->
+    <update id="updateOneMatch" >
+        update matchs
+        <set>
+            <if test="status!=null">
+                status= #{status},
+            </if>
+        </set>
+        where matchid= #{matchId}
+    </update>
+
+
+    <select id="findAllPageOne" resultType="entity.Match">
+       select * from matchs where userid=#{userId} LIMIT #{before},#{after} ;
+    </select>
+
+
+    <insert id="insertOneMatch" >
+        insert into matchs(matchname,matchdate,userid,status) values (#{matchName},#{matchDate},#{userId},0);
+    </insert>
+</mapper>

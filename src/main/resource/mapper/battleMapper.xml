@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.BattleDao">
+    <!--管理员的功能-->
+    <select id="selectFun" parameterType="int" resultType="entity.Functions">
+         select * from  functions where funId  in (select funId from role_fun where roleId=#{roleId})
+    </select>
+
+    <select id="findAllPage"  resultType="entity.Battle">
+         select * from battle LIMIT #{before},#{after} ;
+    </select>
+
+
+    <select id="count" resultType="int">
+        select count(*) from battle
+    </select>
+
+    <insert id="insertOneBattle">
+        insert into battle(matchid,status) values (#{matchId},0)
+    </insert>
+
+    <update id="updateOneBattle" >
+        update battle
+        <set>
+            <if test="status!=null">
+                status= #{status},
+            </if>
+        </set>
+        where battleid= #{battleId}
+    </update>
+
+    <select id="findAllPageInStatus"  resultType="entity.Battle">
+         select * from battle where matchid in(select matchs.matchid from matchs where userid= #{userId} and status = 1)  LIMIT #{before},#{after} ;
+    </select>
+
+    <select id="selectAllBattle" resultType="entity.Battle">
+        select * from battle where matchid = #{matchId};
+    </select>
+    
+    <insert id="insertPlayerInBattle">
+        insert into battle_player(battleid,playerid) values (#{battleId},#{playerId})
+    </insert>
+
+    <select id="findAllPageUs"  resultType="entity.Battle">
+         select * from battle where status = 1  LIMIT #{before},#{after} ;
+    </select>
+    
+    <insert id="insertNullInVote">
+        insert into vote(battleid,matchid,vote1,vote2) values (#{battleId},#{matchId},0,0)
+    </insert>
+
+    <select id="selectAllPlayer" resultType="int">
+        select playerid from player_match where matchid = #{matchId}
+    </select>
+</mapper>

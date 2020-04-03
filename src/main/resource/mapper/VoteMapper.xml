@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.VoteDao">
+
+
+    <select id="selectOneVote" resultType="entity.Vote">
+        select * from vote where matchid =${matchId} and battleid=${battleId}
+    </select>
+
+    <update id="updateOneVote" parameterType="int">
+        update vote
+        <set>
+            <if test="vote1!=null">
+                vote1= #{vote1},
+            </if>
+            <if test="vote2!=null">
+                vote2= #{vote2},
+            </if>
+        </set>
+        where matchid = #{matchId} and battleid =#{battleId};
+    </update>
+
+    <select id="selectOneVotePlayerName"  resultType="entity.player">
+        select * from player where playerid in(select playerid from battle_player where battleid=#{battleId})
+    </select>
+    
+
+    <select id="selectUserVoteLimit" resultType="entity.vote_record">
+         select * from vote_record where matchid=#{matchId} and battleid = #{battleId} and userid = #{userId}
+    </select>
+
+    <insert id="insertUserVoteLimit">
+         insert into vote_record(matchid,battleid,userid,votelimit) values (#{matchId},#{battleId},#{userId},5)
+    </insert>
+
+    <update id="updateUserVoteLimit">
+       update vote_record set votelimit = #{voteLimit} where matchid=#{matchId} and battleid = #{battleId} and userid = #{userId};
+    </update>
+
+    <select id="findAllPage"  resultType="entity.Vote">
+         select * from vote LIMIT #{before},#{after} ;
+    </select>
+
+
+    <select id="count" resultType="int">
+        select count(*) from vote
+    </select>
+</mapper>
